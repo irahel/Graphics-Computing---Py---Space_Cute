@@ -68,4 +68,4 @@ class Star:
 
     # Retorna um numero randomico para velocidade da estrela
     def rand_speed(self):
-        return float(str(randint(0, 1)) +"."+ str(randint(3, 9)))
+        return float(f"{str(randint(0, 1))}.{str(randint(3, 9))}")

@@ -51,7 +51,7 @@ class Planeta:
         glPushMatrix()
 
         glRotate(self.angle, 0, 1, 0)
-        for i in range(0, self.lats + 1):
+        for i in range(self.lats + 1):
             lat0 = pi * (-0.5 + float(float(i - 1) / float(self.lats)))
             z0 = sin(lat0)
             zr0 = cos(lat0)
@@ -63,7 +63,7 @@ class Planeta:
             # Use Quad strips to draw the sphere
             glBegin(GL_QUAD_STRIP)
 
-            for j in range(0, self.longs + 1):
+            for j in range(self.longs + 1):
                 lng = 2 * pi * float(float(j - 1) / float(self.longs))
                 x = cos(lng)
                 y = sin(lng)

@@ -87,8 +87,8 @@ class main(QtWidgets.QOpenGLWidget):
         self.planets_queue = Queue_rotative()
         self.explosion_queue = Queue_rotative()
         self.propellant_queue = Queue_rotative()
-        self.animation_explosion = [None for i in range (EXPLOSION_FRAMES)]
-        self.img_planets = [None for i in range(10)]
+        self.animation_explosion = [None for _ in range (EXPLOSION_FRAMES)]
+        self.img_planets = [None for _ in range(10)]
         self.img_nave_azul = None
         self.img_nave_amarela = None
         self.img_nave_preta = None
@@ -106,23 +106,23 @@ class main(QtWidgets.QOpenGLWidget):
     # Inicializa as filas de pre carregamentos
     def init_queue(self):
 
-        for i in range(20):
+        for _ in range(20):
             new = Enemy()
             self.enemy_queue.push(new)
 
-        for i in range(50):
+        for _ in range(50):
             new = Asteroide()
             self.asteroid_queue.push(new)
 
-        for i in range(100):
+        for _ in range(100):
             new = Shoot()
             self.bullets_queue.push(new)
 
-        for i in range(10):
+        for _ in range(10):
             new = Planeta()
             self.planets_queue.push(new)
 
-        for i in range(50):
+        for _ in range(50):
             new = Explode()
             self.explosion_queue.push(new)
 
@@ -151,10 +151,10 @@ class main(QtWidgets.QOpenGLWidget):
         self.in_scene.append(self.myNave)
 
         for i in range(EXPLOSION_FRAMES):
-            self.animation_explosion[i] = self.loadImage("img/explosion/Comp" + str(i) + ".png")
+            self.animation_explosion[i] = self.loadImage(f"img/explosion/Comp{str(i)}.png")
 
         for i in range(10):
-            self.img_planets[i] = self.loadImage("img/planets/planeta" +str(i) + ".png")
+            self.img_planets[i] = self.loadImage(f"img/planets/planeta{str(i)}.png")
 
         self.skybox = self.loadImage("img/espaco.png")
         self.img_nave_amarela = self.loadImage("img/nave4.png")

@@ -83,14 +83,14 @@ class Nave():
     # Define como é feito o movimento para a direita da nave
     # e verifica se o movimento pode ser feito
     def move_right(self):
-        if self.move_x + self.position_x + 4.0 <= 47:
+        if self.move_x + self.position_x <= 43:
             self.move_x += 1.5 + self.speed
             self.propellant.move_me(1.5 + self.speed, 0)
 
     # Define como é feito o movimento para a esquerda da nave
     # e verifica se o movimento pode ser feito
     def move_left(self):
-        if self.move_x + self.position_x - 4.0 >= -47:
+        if self.move_x + self.position_x >= -43:
             self.move_x -= 1.5 + self.speed
             self.propellant.move_me(-(1.5 +self.speed) , 0)
 

@@ -73,20 +73,12 @@ class Explode:
         glDisable(GL_TEXTURE_2D)
 
         if time() - self.start >= EXPLOSION_FRAME:
-            if not self.type == "player":
-                self.quadro += 1
-                self.start = time()
+            self.quadro += 1
+            self.start = time()
 
-                if self.quadro >= EXPLOSION_FRAMES:
-                    self.quadro = 0
-                    self.dead = True
-            else:
-                self.quadro += 1
-                self.start = time()
-
-                if self.quadro >= EXPLOSION_FRAMES:
-                    self.quadro = 0
-                    self.dead = True
+            if self.quadro >= EXPLOSION_FRAMES:
+                self.quadro = 0
+                self.dead = True
 
     # Move o objeto
     def move_me(self, x, y):

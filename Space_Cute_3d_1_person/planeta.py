@@ -35,10 +35,7 @@ class Planeta:
         self.longs = 10
         self.angle = 0
         self.z = randint(1,2)
-        if self.z == 1:
-            self.z = 40
-        else:
-            self.z = -40
+        self.z = 40 if self.z == 1 else -40
         self.scene_angle = 0
 
     # Define como o planeta deve ser desenhado
@@ -56,7 +53,7 @@ class Planeta:
         glPushMatrix()
         glRotate(self.scene_angle , 0, 1, 0)
         glRotate(self.angle, 0, 1, 0)
-        for i in range(0, self.lats + 1):
+        for i in range(self.lats + 1):
             lat0 = pi * (-0.5 + float(float(i - 1) / float(self.lats)))
             z0 = sin(lat0)
             zr0 = cos(lat0)
@@ -68,7 +65,7 @@ class Planeta:
             # Use Quad strips to draw the sphere
             glBegin(GL_QUAD_STRIP)
 
-            for j in range(0, self.longs + 1):
+            for j in range(self.longs + 1):
                 lng = 2 * pi * float(float(j - 1) / float(self.longs))
                 x = cos(lng)
                 y = sin(lng)
@@ -124,8 +121,5 @@ class Planeta:
         self.planets = images
         self.angle = 0
         self.z = randint(1,2)
-        if self.z == 1:
-            self.z = 40
-        else:
-            self.z = -40
+        self.z = 40 if self.z == 1 else -40
         self.scene_angle = 0

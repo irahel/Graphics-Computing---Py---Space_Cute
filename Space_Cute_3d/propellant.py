@@ -62,9 +62,6 @@ class Propellant:
             glTexCoord2f(0, 1)
             glVertex3f(self.x + w / 2, self.y + h / 2, 1)
             glTexCoord2f(1, 1)
-            glVertex3f(self.x - w / 2, self.y + h / 2, 1)
-
-            glEnd()
         else:
             glBegin(GL_QUADS)
 
@@ -75,25 +72,21 @@ class Propellant:
             glTexCoord2f(1, 0)
             glVertex3f(self.x + w / 2, self.y + h / 2, 1)
             glTexCoord2f(0, 0)
-            glVertex3f(self.x - w / 2, self.y + h / 2, 1)
+        glVertex3f(self.x - w / 2, self.y + h / 2, 1)
 
-            glEnd()
+        glEnd()
         glPopMatrix()
         glDisable(GL_TEXTURE_2D)
 
         if time() - self.start >= PROPELLANT_FRAME:
-            if not self.type == "player":
-                self.quadro += 1
+            self.quadro += 1
+            if self.type != "player":
                 self.start = time()
-                if self.type == "fix":
-                    if self.quadro >= PROPELLANT_FRAMES:
-                        self.quadro = 0
+                if self.quadro >= PROPELLANT_FRAMES:
+                    self.quadro = 0
+                    if self.type == "fix":
                         self.dead = True
-                else:
-                    if self.quadro >= PROPELLANT_FRAMES:
-                        self.quadro = 0
             else:
-                self.quadro += 1
                 self.start = time()
 
                 if self.quadro >= PROPELLANT_FRAMES:

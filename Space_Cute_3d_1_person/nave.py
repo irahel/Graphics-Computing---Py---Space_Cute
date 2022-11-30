@@ -248,7 +248,7 @@ class Nave:
     # Define como é feito o movimento para a direita da nave
     # e verifica se o movimento pode ser feito
     def move_right(self):
-        if self.move_x + self.position_x + 4.0 <= 47:
+        if self.move_x + self.position_x <= 43:
             self.move_x += 1.5 + self.speed
             self.xizi += 1.5 + self.speed
             self.angle = -20
@@ -256,7 +256,7 @@ class Nave:
     # Define como é feito o movimento para a esquerda da nave
     # e verifica se o movimento pode ser feito
     def move_left(self):
-        if self.move_x + self.position_x - 4.0 >= -47:
+        if self.move_x + self.position_x >= -43:
             self.move_x -= 1.5 + self.speed
             self.xizi -= 1.5 + self.speed
             self.angle = 20
@@ -264,14 +264,14 @@ class Nave:
     # Define como é feito o movimento para a cima da nave
     # e verifica se o movimento pode ser feito
     def move_up(self):
-        if self.move_y + 8.0 <= 47:
+        if self.move_y <= 39:
             self.move_y += 1.5 + self.speed
             self.yizi += 1.5 + self.speed
 
     # Define como é feito o movimento para a baixo da nave
     # e verifica se o movimento pode ser feito
     def move_down(self):
-        if self.move_y - 8.0 >= -47:
+        if self.move_y >= -39:
             self.move_y -= 1.5 + self.speed
             self.yizi -= 1.5 + self.speed
 

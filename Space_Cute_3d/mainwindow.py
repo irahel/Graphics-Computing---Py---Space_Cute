@@ -140,13 +140,10 @@ class Ui_MainWindow(object):
 
     # Perde vida
     def down_life(self):
-        if self.vida > 1:
-            self.vida -= 1
-            self.atualize()
-        else:
-            self.vida -= 1
+        if self.vida <= 1:
             self.openGLWidget.dead()
-            self.atualize()
+        self.vida -= 1
+        self.atualize()
 
     # Ganha vida
     def up_life(self):
@@ -156,9 +153,9 @@ class Ui_MainWindow(object):
 
     # Atualiza os campos
     def atualize(self):
-        self.score_line.setText("Score: " + str(self.score))
-        self.Record_line.setText("Record: " + str(self.record))
-        self.Life_line.setText("Vida: "+str(self.vida))
+        self.score_line.setText(f"Score: {str(self.score)}")
+        self.Record_line.setText(f"Record: {str(self.record)}")
+        self.Life_line.setText(f"Vida: {str(self.vida)}")
 
     #  Verifica se o record foi ultrapassado
     def check_record(self):
