@@ -144,9 +144,9 @@ class main(QtWidgets.QOpenGLWidget):
         self.explosion_queue = Queue_rotative()
         self.propellant_queue = Queue_rotative()
         self.power_queue = Queue_rotative()
-        self.animation_explosion = [None for i in range (EXPLOSION_FRAMES)]
-        self.animation_propellant_enemy = [None for i in range (PROPELLANT_FRAMES)]
-        self.img_planets = [None for i in range (10)]
+        self.animation_explosion = [None for _ in range (EXPLOSION_FRAMES)]
+        self.animation_propellant_enemy = [None for _ in range (PROPELLANT_FRAMES)]
+        self.img_planets = [None for _ in range (10)]
         self.img_nave_azul = None
         self.img_nave_amarela = None
         self.img_nave_preta = None
@@ -166,35 +166,35 @@ class main(QtWidgets.QOpenGLWidget):
     # Inicializa as filas de pre carregamentos
     def init_queue(self):
 
-        for i in range (20):
+        for _ in range (20):
             new = Enemy()
             self.enemy_queue.push(new)
 
-        for i in range (50):
+        for _ in range (50):
             new = Asteroide()
             self.asteroid_queue.push(new)
 
-        for i in range(100):
+        for _ in range(100):
             new = Shoot()
             self.bullets_queue.push(new)
 
-        for i in range(10):
+        for _ in range(10):
             new = Flor()
             self.flowers_queue.push(new)
 
-        for i in range(10):
+        for _ in range(10):
             new = Planeta()
             self.planets_queue.push(new)
 
-        for i in range(50):
+        for _ in range(50):
             new = Explode()
             self.explosion_queue.push(new)
 
-        for i in range(30):
+        for _ in range(30):
             new = Propellant()
             self.propellant_queue.push(new)
 
-        for i in range(20):
+        for _ in range(20):
             new = Power_up()
             self.power_queue.push(new)
 
@@ -221,13 +221,16 @@ class main(QtWidgets.QOpenGLWidget):
         self.imageID_back = self.loadImage("img/Background.png")
 
         for i in range(EXPLOSION_FRAMES):
-            self.animation_explosion[i] = self.loadImage("img/explosion/Comp" + str(i) + ".png")
+            self.animation_explosion[i] = self.loadImage(f"img/explosion/Comp{str(i)}.png")
 
         for i in range(PROPELLANT_FRAMES):
-            self.animation_propellant_enemy[i] = self.loadImage("img/fire/Comp" + str(i) + ".png")
+            self.animation_propellant_enemy[i] = self.loadImage(
+                f"img/fire/Comp{str(i)}.png"
+            )
+
 
         for i in range (10):
-            self.img_planets[i] = self.loadImage("img/planets/planeta" +str(i) + ".png")
+            self.img_planets[i] = self.loadImage(f"img/planets/planeta{str(i)}.png")
 
         self.img_nave_amarela = self.loadImage("img/nave4.png")
         self.img_nave_azul = self.loadImage("img/nave1.png")
@@ -366,7 +369,7 @@ class main(QtWidgets.QOpenGLWidget):
         # Desenha os ornamentos ( "Flores" )
         # e retira os objetos "mortos" retornando eles para a fila
         for obj in self.ornaments:
-            if not obj == None:
+            if obj is not None:
                 if obj.dead:
                     if isinstance(obj, Flor):
                         self.flowers_queue.push(obj)
@@ -395,7 +398,7 @@ class main(QtWidgets.QOpenGLWidget):
         # e retira os objetos mortos retornando ele para a fila
         # e instancia uma explosao no lugar
         for obj in self.in_scene:
-            if not obj == None:
+            if obj is not None:
                 if obj.dead:
                     if isinstance(obj, Enemy):
                         new_explosion = self.explosion_queue.pop()
@@ -419,9 +422,8 @@ class main(QtWidgets.QOpenGLWidget):
                     elif isinstance(obj, Power_up):
                         self.power_queue.push(obj)
                         self.in_scene.remove(obj)
-                if isinstance(obj, Nave):
-                    if obj.shooting:
-                        self.create_shoot(obj.move_x + obj.position_x)
+                if isinstance(obj, Nave) and obj.shooting:
+                    self.create_shoot(obj.move_x + obj.position_x)
                 obj.draw()
                 obj.act()
                 obj.check_dead()
@@ -430,7 +432,7 @@ class main(QtWidgets.QOpenGLWidget):
         for obj_A in self.in_scene:
             if isinstance(obj_A, Asteroide):
                 for obj_B in self.in_scene:
-                    if not (obj_A == obj_B):
+                    if obj_A != obj_B:
                         if isinstance(obj_B, Nave) and self.collide(obj_B, obj_A):
                             ui.down_life()
                             obj_A.dead = True
@@ -464,17 +466,14 @@ class main(QtWidgets.QOpenGLWidget):
 
                     obj_A.elapsed_shoot_time = 0
                 for obj_B in self.in_scene:
-                    if not (obj_A == obj_B):
+                    if obj_A != obj_B:
                         if isinstance(obj_B, Nave) and self.collide(obj_B, obj_A):
                             ui.down_life()
                             obj_A.dead = True
                         elif isinstance(obj_B, Shoot) and self.collide(obj_B, obj_A):
                             if not obj_B.is_enemy:
                                 obj_A.dead = True
-                                if self.hack:
-                                    obj_B.dead = False
-                                else:
-                                    obj_B.dead = True
+                                obj_B.dead = not self.hack
                                 self.sound_explosion.play()
                                 ui.up_point(10)
                                 if ui.score % 1000 == 0:
@@ -482,28 +481,31 @@ class main(QtWidgets.QOpenGLWidget):
             elif isinstance(obj_A, Shoot):
                 if obj_A.is_enemy:
                     for obj_B in self.in_scene:
-                        if not (obj_A == obj_B):
-                            if isinstance(obj_B, Nave) and self.collide(obj_B, obj_A):
-                                ui.down_life()
-                                obj_A.dead = True
+                        if (
+                            obj_A != obj_B
+                            and isinstance(obj_B, Nave)
+                            and self.collide(obj_B, obj_A)
+                        ):
+                            ui.down_life()
+                            obj_A.dead = True
             elif isinstance(obj_A, Nave):
-                if self.speed:
-                    obj_A.speed = 3
-                else:
-                    obj_A.speed = 0
+                obj_A.speed = 3 if self.speed else 0
                 for obj_B in self.in_scene:
-                    if not (obj_A == obj_B):
-                        if isinstance(obj_B, Power_up) and self.collide(obj_B, obj_A):
-                            obj_B.dead = True
-                            self.sound_power.play()
-                            if obj_B.skin == 0:
-                                ui.up_life()
-                            elif obj_B.skin == 1:
-                                self.hack = True
-                                self.elapsed_time_power_shoot = 0
-                            elif obj_B.skin == 2:
-                                self.speed = True
-                                self.elapsed_time_power_speed = 0
+                    if (
+                        obj_A != obj_B
+                        and isinstance(obj_B, Power_up)
+                        and self.collide(obj_B, obj_A)
+                    ):
+                        obj_B.dead = True
+                        self.sound_power.play()
+                        if obj_B.skin == 0:
+                            ui.up_life()
+                        elif obj_B.skin == 1:
+                            self.hack = True
+                            self.elapsed_time_power_shoot = 0
+                        elif obj_B.skin == 2:
+                            self.speed = True
+                            self.elapsed_time_power_speed = 0
 
         self.spawn_asteroide()
         self.spawn_inimigos()
@@ -554,7 +556,7 @@ class main(QtWidgets.QOpenGLWidget):
 
     # Retorna um tamanho aleatorio para os planetas
     def rand_tam(self):
-        return float(str(randint(0, 2)) +"."+ str(randint(1, 5)))
+        return float(f"{str(randint(0, 2))}.{str(randint(1, 5))}")
 
     # Retorna um tamanho aleatorio para as estrelas
     def rand_tam_star(self):

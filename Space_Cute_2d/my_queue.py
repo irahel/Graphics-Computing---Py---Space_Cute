@@ -17,7 +17,4 @@ class Queue_rotative():
         return self.tamanho(self.dates)
 
     def tamanho(self, array):
-        tams = 0
-        for i in array:
-            tams += 1
-        return tams
+        return sum(1 for _ in array)
